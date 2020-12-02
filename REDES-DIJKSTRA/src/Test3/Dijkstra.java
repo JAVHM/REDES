@@ -29,31 +29,31 @@ public class Dijkstra {
         return index;
     }
     
-    public void printMatriz(Integer dist[], int x, int iteracion, int origen, Integer distF[])
+    public void printMatriz(Integer dist[], int x, int iteracion, int origen, Integer distF[], String cadena)
     {
-        System.out.println("Iteracion: " + (iteracion+1) );
+        System.out.println("Iteracion: " + (iteracion+1) + ", Cadena:" + cadena);
         for(int i = 0; i < x; i++)
         {
-            if(dist[i] != Integer.MAX_VALUE)
-            {
+            //if(dist[i] != Integer.MAX_VALUE)
+            //{
                 if(dist[i] < distF[i])
                 {
-                    System.out.println("Nodo " + origen + " --> " + "Nodo " + i + ": " + dist[i]);
+                    System.out.println("Nodo " + (origen+1) + " --> " + "Nodo " + (i+1) + ": " + dist[i]);
                 }
                 else
                 {
-                    System.out.println("Nodo " + origen + " --> " + "Nodo " + i + ": " + distF[i]);
+                    System.out.println("Nodo " + (origen+1) + " --> " + "Nodo " + (i+1) + ": " + distF[i]);
                 }
-            }
+            //}
         }
     }
     
-    public void Djisktra(Integer matriz[][], int origen)
+    public void DijkstraF(Integer matriz[][], int origen)
     {
         Integer distancias[] = new Integer[matriz.length];
         Integer distanciasFinales[] = new Integer[matriz.length];
         Boolean yaUsados[] = new Boolean[matriz.length];
-        
+        String cadena = "";
         //Inicializar todo
         for(int i = 0; i<matriz.length; i++)
         {
@@ -61,14 +61,14 @@ public class Dijkstra {
             distanciasFinales[i] = Integer.MAX_VALUE;
             yaUsados[i] = false;//No repetir de index
         }
-        
-        distancias[origen] = 0;//Distancia del nodo origen al nodo origen
-        System.out.println("Iteracion: " + 0 );
+        distancias[origen] = 0;
+        System.out.println("Iteracion: " + 0);
         System.out.println("Nodo " + origen + " --> " + "Nodo " + origen + ": " + 0);
         for(int iteracion = 0; iteracion<matriz.length; iteracion++)
         {
             int indexMenor = minDistanciaIndex(distancias, yaUsados, matriz);
             yaUsados[indexMenor] = true;
+            cadena = cadena +"."+ (indexMenor+1);
             for(int j = 0; j < matriz.length; j++)
             {
                 if(yaUsados[j] == false && matriz[indexMenor][j]!= 0 && distancias[indexMenor]!=Integer.MAX_VALUE && matriz[indexMenor][j] <= distancias[j])
@@ -80,7 +80,7 @@ public class Dijkstra {
                     }
                 }
             }
-            printMatriz(distancias,matriz.length,iteracion,origen ,distanciasFinales);
+            printMatriz(distancias,matriz.length,iteracion,origen ,distanciasFinales, cadena);
         }
     }
     
@@ -129,16 +129,14 @@ public class Dijkstra {
     }
     
     public static void main(String[] args) {
-        
-        //System.out.print("¿Con cuantos nodos contará el sistema?: ");
-        //Scanner scanner = new Scanner(System.in);
-        //int numeroDeNodos = scanner.nextInt();
-        //CrearMatriz(numeroDeNodos);
-        //ImprimirMatriz(CrearMatriz(numeroDeNodos));
-        //ImprimirMatriz(CrearMatrizPrefab());
-        //read();
-        
+        System.out.println("Ingrese número (comizienza en 1): ");
+        Scanner scan = new Scanner(System.in);
+        int origen = scan.nextInt()-1;
+        scan.close();
+        long start = System.currentTimeMillis();
         Dijkstra p = new Dijkstra();
-        p.Djisktra(readMatrix(), 0);
+        p.DijkstraF(readMatrix(), origen);
+        long end = System.currentTimeMillis();
+        System.out.println("Milisegundos que demora la ejecución: " + (end - start));
     }
 }
